@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "preserve",
+    "allowJs": true,
+    "checkJs": false,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "lib": ["ESNext", "DOM"],
+    "noEmit": true
+  },
+  "vueCompilerOptions": {
+    "globalTypesPath": "./src/global.d.ts"
+  },
+  "include": ["src/**/*.vue", "src/**/*.js"]
+}
