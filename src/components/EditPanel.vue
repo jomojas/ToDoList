@@ -1,24 +1,24 @@
 <script setup>
-  import {defineProps, defineEmits, toRefs, ref} from 'vue';
-  const emit = defineEmits(['close', 'confirm']);
-  const props = defineProps(['events', 'selectedId'])
+  import { useTodoStore } from '@/store/todoStore';
+  import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
 
-  const {events, selectedId} = toRefs(props);
-
-  // selectedId has only one id when edit is available
+  const todoStore = useTodoStore();
+  
+  const { selectedId, events } = storeToRefs(todoStore);
+  const { closeEditPanel, editEvent } = todoStore;
   const id = selectedId.value[0];
-
-  // Find description
   const event = events.value.find(event => event.id === id); 
   const inputText = ref(event.description);
 
   function handleCancel() {
-    emit('close');
+    closeEditPanel(); // Close the edit panel
   }
-  
   function handleConfirm() {
-    emit('confirm', inputText.value);
-    emit('close');
+    if (inputText.value.trim()) {
+      editEvent(inputText.value.trim()); // Edit the event
+      closeEditPanel(); // Close the edit panel
+    }
   }
 </script>
 

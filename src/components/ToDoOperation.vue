@@ -1,21 +1,21 @@
 <script setup>
-  import { defineEmits, defineProps, toRef } from 'vue';
-  const props = defineProps(['selectedId', 'hasCompleted']);
-  const emit = defineEmits(["deleteEvent", "openEditPanel", "clear"]);
+  import { useTodoStore } from '@/store/todoStore';
+  import { storeToRefs } from 'pinia';
 
-  const selectedId = toRef(props, 'selectedId');
-  const hasCompleted = toRef(props, 'hasCompleted');
+  const todoStore = useTodoStore();
 
-  function openEditPanel() {
-    emit('openEditPanel');
+  const { selectedId, hasCompleted } = storeToRefs(todoStore);
+  const { openEditPanel, deleteEvent, clearCompletedEvents
+  } = todoStore;
+
+  function handleOpen() {
+    openEditPanel(); // Open the edit panel
   }
-
   function handleDelete() {
-    emit('deleteEvent');
+    deleteEvent(); // Delete the selected events
   }
-
   function handleClear() {
-    emit('clear');
+    clearCompletedEvents(); // Clear completed events
   }
 </script>
 
@@ -23,7 +23,7 @@
   <div class="flex items-center justify-center">
     <div class="flex justify-center items-center bg-blue-100 text-2xl w-[500px] rounded-lg shadow-lg h-20">
       <button 
-      @click="openEditPanel"
+      @click="handleOpen"
       :disabled="selectedId.length !== 1" 
       :class="[
         'inline w-32 h-12 text-black rounded-lg mx-5',

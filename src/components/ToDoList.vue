@@ -1,23 +1,16 @@
 <script setup>
-  import { defineProps, ref, toRefs } from 'vue'; 
-  const props = defineProps(["events", "selectedId", "filterStatus"]);
-  const emit = defineEmits(["toggleSelection", "setFilterStatus"]);
-  
-  const {events, selectedId, filterStatus} = toRefs(props);
-
-  const id = ref(0);
-  
-  function handleToggle(eventId) {
-    // console.log("selectedId in ToDoList:", selectedId);
-    emit('toggleSelection', eventId);
-  }
+  import { useTodoStore } from '@/store/todoStore';
+  import { storeToRefs } from 'pinia';
+  const todoStore = useTodoStore();
+  const { filterEvents, selectedId, filterStatus } = storeToRefs(todoStore);
+  const { toggleSelection, setFilterStatus } = todoStore;
 </script>
 
 <template>
   <div class="flex flex-col items-center justify-center">
     <div class="flex items-center gap-x-4 my-4">
       <button 
-        @click="emit('setFilterStatus', 'all')"
+        @click="setFilterStatus('all')"
         :disabled="filterStatus === 'all'"
         :class="[
           'w-24 h-10 rounded-lg text-white',
@@ -30,7 +23,7 @@
       </button>
 
       <button 
-        @click="emit('setFilterStatus', 'completed')"
+        @click="setFilterStatus('completed')"
         :disabled="filterStatus === 'completed'"
         :class="[
           'w-24 h-10 rounded-lg text-white',
@@ -43,7 +36,7 @@
       </button>
 
       <button 
-        @click="emit('setFilterStatus', 'incomplete')"
+        @click="setFilterStatus('incomplete')"
         :disabled="filterStatus === 'incomplete'"
         :class="[
           'w-24 h-10 rounded-lg text-white',
@@ -56,7 +49,7 @@
       </button>
     </div>
     <div class="bg-blue-100 text-2xl w-[500px] shadow-lg rounded-lg">
-      <div v-for="event in events" :key="event.id" @click="handleToggle(event.id)" 
+      <div v-for="event in filterEvents" :key="event.id" @click="toggleSelection(event.id)" 
       :class="{     // conditional class
         'bg-yellow-200': selectedId.includes(event.id), // Highlight certain event
         'bg-blue-500': !selectedId.includes(event.id)   // Normal background
