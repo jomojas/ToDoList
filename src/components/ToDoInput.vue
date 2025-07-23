@@ -1,13 +1,18 @@
 <script setup>
-  import { defineEmits, ref } from 'vue';
+  import { useTodoStore } from '@/store/todoStore';
+  import { ref } from 'vue';
 
+  const todoStore = useTodoStore();
   const inputText = ref('');
 
-  const emit = defineEmits(['addEvent']);
-
+  const { addEvent } = todoStore;
+  // Define the handleAdd method
   function handleAdd() {
-    emit('addEvent', inputText.value);
-    inputText.value = '';
+    // Pass the inputText value to addEvent and clear the input field after adding
+    if (inputText.value.trim()) {
+      addEvent(inputText.value.trim()); // Add the event
+      inputText.value = ''; // Clear the input field
+    }
   }
 </script>
 

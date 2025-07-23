@@ -3,26 +3,11 @@
   import List from '@/components/ToDoList.vue'
   import Operation from '@/components/ToDoOperation.vue'
   import EditPanel from '@/components/EditPanel.vue'
-  import { onMounted, reactive, ref, watch } from 'vue'
-  import { useTodo } from '@/composables/useTodo';
+  import { useTodoStore } from '@/store/todoStore';
+  import { storeToRefs } from 'pinia';
 
-  const {
-    events,
-    selectedId,
-    isEditing,
-    filterEvents,
-    filterStatus,
-    hasCompleted,
-    setFilterStatus, 
-    addEvent,
-    deleteEvent,
-    toggleSelection,
-    editEvent,
-    openEditPanel,
-    closeEditPanel,
-    clearCompletedEvents
-  } = useTodo();
-
+  const todoStore = useTodoStore();
+  const { isEditing } = storeToRefs(todoStore);
 </script>
 
 <template>
@@ -32,9 +17,9 @@
         <router-link to="/" class="text-blue-500 hover:underline">Home</router-link> 
         <router-link to="/about" class="text-blue-500 hover:underline">About</router-link> 
       </div>
-      <Input @addEvent="addEvent" />
-      <List :events="filterEvents" :selectedId="selectedId" :filterStatus = "filterStatus" @toggleSelection="toggleSelection" @setFilterStatus="setFilterStatus" />
-      <Operation :hasCompleted="hasCompleted" :selectedId="selectedId" @deleteEvent="deleteEvent" @openEditPanel="openEditPanel" @clear="clearCompletedEvents"/>
+      <Input />
+      <List />
+      <Operation />
     </div>
 
     <!-- Gray overlay -->
@@ -43,10 +28,6 @@
     <!-- EditPanel Modal -->
     <EditPanel 
       v-if="isEditing"
-      :events="events" 
-      :selectedId="selectedId" 
-      @close="closeEditPanel" 
-      @confirm="editEvent"
       class="fixed z-50" 
     />
   </div>
