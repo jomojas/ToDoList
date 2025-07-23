@@ -16,6 +16,11 @@ export function useTodo() {
     }
   })
 
+  // Check Whether there are completed events
+  const hasCompleted = computed(() => {
+    return events.value.some(event => event.completed);
+  });
+
   function setFilterStatus(status) {
     filterStatus.value = status;
   }
@@ -43,6 +48,12 @@ export function useTodo() {
     } else {
       selectedId.value.splice(index, 1);
     }
+  }
+
+  function clearCompletedEvents() {
+    events.value = events.value.filter((event) => {
+      return !event.completed;
+    })
   }
 
   function deleteEvent() {
@@ -105,12 +116,14 @@ export function useTodo() {
     isEditing,
     filterEvents,
     filterStatus,
+    hasCompleted,
     setFilterStatus, 
     addEvent,
     deleteEvent,
     toggleSelection,
     editEvent,
     openEditPanel,
-    closeEditPanel
+    closeEditPanel,
+    clearCompletedEvents
   };
 }
